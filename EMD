@@ -1,0 +1,30 @@
+% N=6000; % number of samples
+% data1=1+2.*randn(N,1); % random numbers from normal distributions with mean=1 and std=2
+% %data2=1+2.*randn(N,1); 
+% data2 = pearsrnd(1,2,0,3,N,1);%pearsrnd(mu,sigma,skew,kurt,m,n) 
+                                            %works only for kurt > sigma^2+1
+                                            %kurt=3 is normal distribution
+                                            %pearsrnd(1,2,0,3,N,1); is equivalent to 1+2.*randn(N,1); 
+
+
+data=importdata('Chao.txt');
+data1=data(:,1);
+data2=data(:,2);
+N=numel(data1);
+% bins for histograms
+max_bin=max([max(data1) max(data2)]);
+min_bin=min([min(data1) min(data2)]);
+bins_data=linspace(min_bin,max_bin,200);
+
+% histograms
+[h_data1,pos1]=hist(data1,bins_data);
+[h_data2,pos2]=hist(data2,bins_data);
+
+% plot comparing the histograms
+bar(pos1,h_data1,0.9,'b','linestyle','none');
+hold on
+bar(pos2,h_data2,0.5,'r','linestyle','none');
+hold off
+
+% cumsum(h_data1/N) is an approximation of CDF
+EMDd1=sum(abs(cumsum(h_data1/N)-cumsum(h_data2/N))),
